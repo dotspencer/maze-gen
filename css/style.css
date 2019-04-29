@@ -3,5 +3,6 @@ body {
 }
 
 canvas {
-  background-color: #333;
+  // background-color: #333;
+  border: 1px solid lightgray;
 }
