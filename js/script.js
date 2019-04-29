@@ -22,20 +22,44 @@ for (let i = 0; i < DIMENTION * DIMENTION; i++) {
 }
 
 explore(0);
-console.log('tree:', tree);
+draw();
+
+function draw() {
+  const canvas = document.querySelector('canvas');
+  const width = canvas.getAttribute('width');
+  const height = canvas.getAttribute('height');
+
+  const xSpace = width / DIMENTION;
+  const xStart = xSpace / 2;
+
+  const ySpace = height / DIMENTION;
+  const yStart = ySpace / 2;
+
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = 'lightgray';
+
+  for (let i = 0; i < tree.length; i++) {
+    const pair = tree[i];
+    const src = toRowColumn(pair[0]);
+    const dest = toRowColumn(pair[1]);
+
+    ctx.beginPath();
+    ctx.moveTo(xStart + src.row * xSpace, yStart + src.column * ySpace);
+    ctx.lineTo(xStart + dest.row * xSpace, yStart + dest.column * ySpace);
+    ctx.stroke();
+  }
+}
 
 function explore(index) {
   visited[index] = true;
+  let unvisited = getNeighbors(index);
 
-  const { up, down, left, right } = getNeighbors(index);
-  let unvisited = [up, down, right, left].filter(n => n && !visited[n]);
-
-  while(unvisited.length > 0) {
-    const randIndex = Math.floor(Math.random() * unvisited.length);
-    const next = unvisited[randIndex];
-    tree.push([index, next]); // add pair to tree
-    explore(next);
-    unvisited.splice(randIndex, 1); // remove from unvisited
+  for (let i = 0; i < unvisited.length; i++) {
+    const next = unvisited[i];
+    if (!visited[next]) {
+      tree.push([index, next]); // add pair to tree
+      explore(next);
+    }
   }
 }
 
@@ -45,12 +69,12 @@ function getNeighbors(index) {
   const down = toIndex(row + 1, column);
   const left = toIndex(row, column - 1);
   const right = toIndex(row, column + 1);
-  return { up, down, left, right };
+  return shuffle([up, down, left, right].filter(n => n));
 }
 
 function toRowColumn(index) {
   const row = Math.floor(index / DIMENTION);
-  const column = index % 10;
+  const column = index % DIMENTION;
   return { row, column };
 }
 
@@ -58,4 +82,14 @@ function toIndex(row, column) {
   if (row < 0 || row >= DIMENTION) return null;
   if (column < 0 || column >= DIMENTION) return null;
   return (row * DIMENTION) + column;
+}
+
+function shuffle(array){
+  for(let i = 0; i < array.length; i++){
+    const randomIndex = Math.floor(Math.random() * array.length);
+    const temp = array[i];
+    array[i] = array[randomIndex];
+    array[randomIndex] = temp;
+  }
+  return array;
 }
