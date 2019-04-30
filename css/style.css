@@ -1,4 +1,7 @@
+* { box-sizing: border-box; }
+
 body {
+  margin: 0;
   background-color: whitesmoke;
   text-align: center;
 }
@@ -7,4 +10,5 @@ canvas {
   background-color: #333;
   border: 2px solid #333;
   width: 400px;
+  margin-top: calc(50vh - 200px);
 }
