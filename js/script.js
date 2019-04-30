@@ -1,4 +1,4 @@
-const DIMENTION = 80;
+const DIMENTION = 60;
 
 const start = 0;
 const graph = [];
@@ -36,7 +36,7 @@ async function draw() {
   const yStart = ySpace / 2;
 
   const ctx = canvas.getContext('2d');
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 6;
   ctx.strokeStyle = 'white';
 
   for (let i = 0; i < tree.length; i++) {
@@ -45,11 +45,19 @@ async function draw() {
     const dest = toRowColumn(pair[1]);
 
     ctx.beginPath();
+    // ctx.strokeStyle = randomColor();
     ctx.moveTo(xStart + src.row * xSpace, yStart + src.column * ySpace);
     ctx.lineTo(xStart + dest.row * xSpace, yStart + dest.column * ySpace);
     ctx.stroke();
-    await new Promise(resolve => setTimeout(resolve, 0));
+    // if (i % 2 === 0) {
+      await new Promise(resolve => setTimeout(resolve, 15));
+    // }
   }
+}
+
+function randomColor() {
+  const r = () => Math.floor(Math.random() * 256);
+  return `rgb(${r()}, ${r()}, ${r()})`;
 }
 
 function explore(index) {
