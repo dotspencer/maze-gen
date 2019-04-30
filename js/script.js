@@ -1,6 +1,8 @@
-const DIMENTION = 50;
+const DIMENTION = 40;
+const LINE_WIDTH = 10;
 
-const start = DIMENTION * DIMENTION / 2 - (DIMENTION / 2);
+// const start = DIMENTION * DIMENTION / 2 - (DIMENTION / 2);
+const start = 0;
 const graph = [];
 const tree = [];
 const visited = {};
@@ -36,18 +38,34 @@ async function draw() {
   const yStart = ySpace / 2;
 
   const ctx = canvas.getContext('2d');
-  ctx.lineWidth = 6;
+  ctx.lineWidth = LINE_WIDTH;
   ctx.strokeStyle = 'white';
 
   for (let i = 0; i < tree.length; i++) {
     const pair = tree[i];
     const src = toRowColumn(pair[0]);
+    src.x = xStart + src.row * xSpace;
+    src.y = yStart + src.column * ySpace;
     const dest = toRowColumn(pair[1]);
+    dest.x = xStart + dest.row * xSpace;
+    dest.y = yStart + dest.column * ySpace;
 
+    const adjust = LINE_WIDTH / 2;
     ctx.beginPath();
+
+    // vertical
+    if (src.x === dest.x) {
+      ctx.moveTo(src.x, Math.min(src.y, dest.y) - adjust);
+      ctx.lineTo(dest.x, Math.max(src.y, dest.y) + adjust);
+    }
+    // horizontal
+    else {
+      ctx.moveTo(Math.min(src.x, dest.x) - adjust, src.y);
+      ctx.lineTo(Math.max(src.x, dest.x) + adjust, dest.y);
+    }
+
     // ctx.strokeStyle = randomColor();
-    ctx.moveTo(xStart + src.row * xSpace, yStart + src.column * ySpace);
-    ctx.lineTo(xStart + dest.row * xSpace, yStart + dest.column * ySpace);
+
     ctx.stroke();
     // if (i % 2 === 0) {
       await new Promise(resolve => setTimeout(resolve, 10));
