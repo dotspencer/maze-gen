@@ -37,6 +37,11 @@ async function draw() {
   const yStart = ySpace / 2;
 
   const ctx = canvas.getContext('2d');
+
+  // fill background
+  ctx.fillStyle = '#333';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
   ctx.lineWidth = LINE_WIDTH;
   ctx.strokeStyle = 'white';
 
