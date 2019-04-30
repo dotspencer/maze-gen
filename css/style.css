@@ -1,7 +1,7 @@
 * { box-sizing: border-box; }
 
 body {
-  margin: 0;
+  margin-top: 0;
   background-color: whitesmoke;
   text-align: center;
   font-family: system-ui, sans-serif;
@@ -15,7 +15,7 @@ canvas {
 #wrap {
   display: inline-block;
   margin-top: calc(50vh - (400px + 36px + 36px + 3rem) / 2);
-  width: 400px;
+  max-width: 400px;
 }
 
 p {
