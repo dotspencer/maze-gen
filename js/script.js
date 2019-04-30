@@ -1,6 +1,6 @@
-const DIMENTION = 60;
+const DIMENTION = 50;
 
-const start = 0;
+const start = DIMENTION * DIMENTION / 2 - (DIMENTION / 2);
 const graph = [];
 const tree = [];
 const visited = {};
@@ -21,7 +21,7 @@ for (let i = 0; i < DIMENTION * DIMENTION; i++) {
   node.edges = edges;
 }
 
-explore(0);
+explore(start);
 draw();
 
 async function draw() {
@@ -50,7 +50,7 @@ async function draw() {
     ctx.lineTo(xStart + dest.row * xSpace, yStart + dest.column * ySpace);
     ctx.stroke();
     // if (i % 2 === 0) {
-      await new Promise(resolve => setTimeout(resolve, 15));
+      await new Promise(resolve => setTimeout(resolve, 10));
     // }
   }
 }
