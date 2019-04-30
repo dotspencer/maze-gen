@@ -1,13 +1,12 @@
 const DIMENTION = 40;
 const LINE_WIDTH = 10;
 
-// const start = DIMENTION * DIMENTION / 2 - (DIMENTION / 2);
 const start = 0;
 const graph = [];
 const tree = [];
 const visited = {};
 
-// fill graph
+// add nodes to graph
 for (let i = 0; i < DIMENTION * DIMENTION; i++) {
   graph.push({
     index: i,
@@ -15,7 +14,7 @@ for (let i = 0; i < DIMENTION * DIMENTION; i++) {
   });
 }
 
-// add connections
+// add edges
 for (let i = 0; i < DIMENTION * DIMENTION; i++) {
   const node = graph[i];
   const { up, down, left, right } = getNeighbors(i);
@@ -50,7 +49,7 @@ async function draw() {
     dest.x = xStart + dest.row * xSpace;
     dest.y = yStart + dest.column * ySpace;
 
-    const adjust = LINE_WIDTH / 2;
+    const adjust = LINE_WIDTH / 2; // used to make sharp corners
     ctx.beginPath();
 
     // vertical
@@ -64,23 +63,14 @@ async function draw() {
       ctx.lineTo(Math.max(src.x, dest.x) + adjust, dest.y);
     }
 
-    // ctx.strokeStyle = randomColor();
-
     ctx.stroke();
-    // if (i % 2 === 0) {
-      await new Promise(resolve => setTimeout(resolve, 10));
-    // }
+    await new Promise(resolve => setTimeout(resolve, 10));
   }
-}
-
-function randomColor() {
-  const r = () => Math.floor(Math.random() * 256);
-  return `rgb(${r()}, ${r()}, ${r()})`;
 }
 
 function explore(index) {
   visited[index] = true;
-  let unvisited = getNeighbors(index);
+  const unvisited = getNeighbors(index);
 
   for (let i = 0; i < unvisited.length; i++) {
     const next = unvisited[i];
