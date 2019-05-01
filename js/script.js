@@ -70,15 +70,18 @@ function shuffle(array){
 }
 
 async function draw() {
+
+  const adjust = LINE_WIDTH / 2; // used to make sharp corners
+  const borderWidth = adjust / 2;
+
   const canvas = document.querySelector('canvas');
-  const width = canvas.getAttribute('width');
-  const height = canvas.getAttribute('height');
+  const width = canvas.getAttribute('width') - (borderWidth * 2);
+  const height = canvas.getAttribute('height') - (borderWidth * 2);
 
   const xSpace = width / DIMENTION;
-  const xStart = xSpace / 2;
-
+  const xStart = borderWidth + xSpace / 2;
   const ySpace = height / DIMENTION;
-  const yStart = ySpace / 2;
+  const yStart = borderWidth + ySpace / 2;
 
   const ctx = canvas.getContext('2d');
 
@@ -98,7 +101,6 @@ async function draw() {
     dest.x = xStart + dest.row * xSpace;
     dest.y = yStart + dest.column * ySpace;
 
-    const adjust = LINE_WIDTH / 2; // used to make sharp corners
     ctx.beginPath();
 
     // vertical
