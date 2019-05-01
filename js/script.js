@@ -2,6 +2,8 @@ const DIMENTION = 40;
 const LINE_WIDTH = 10;
 
 const start = 0;
+let end = 0;
+let longestDist = 0;
 const graph = [];
 const tree = [];
 const visited = {};
@@ -22,18 +24,24 @@ for (let i = 0; i < DIMENTION * DIMENTION; i++) {
   node.edges = edges;
 }
 
-explore(start);
+explore(start, 0);
 draw();
 
-function explore(index) {
+function explore(index, dist) {
   visited[index] = true;
-  const unvisited = getNeighbors(index);
+  const neighbors = getNeighbors(index);
 
-  for (let i = 0; i < unvisited.length; i++) {
-    const next = unvisited[i];
+  // keep track of the node furthest from start that's on the edge
+  if (neighbors.length < 4 && dist > longestDist) {
+    longestDist = dist;
+    end = index;
+  }
+
+  for (let i = 0; i < neighbors.length; i++) {
+    const next = neighbors[i];
     if (!visited[next]) {
       tree.push([index, next]); // add pair to tree
-      explore(next);
+      explore(next, dist + 1);
     }
   }
 }
@@ -113,8 +121,21 @@ async function draw() {
       ctx.moveTo(Math.min(src.x, dest.x) - adjust, src.y);
       ctx.lineTo(Math.max(src.x, dest.x) + adjust, dest.y);
     }
-
     ctx.stroke();
+
     await new Promise(resolve => setTimeout(resolve, 10));
   }
+
+  // show start end end of maze
+  paintIndex(ctx, start, 'lime', adjust, xStart, xSpace, yStart, ySpace);
+  paintIndex(ctx, end, 'deepskyblue', adjust, xStart, xSpace, yStart, ySpace);
+}
+
+function paintIndex(ctx, index, color, adjust, xStart, xSpace, yStart, ySpace) {
+  const { row, column } = toRowColumn(index);
+  const x = xStart + row * xSpace;
+  const y = yStart + column * ySpace;
+  ctx.fillStyle = color;
+  ctx.fillRect(x - adjust, y - adjust, LINE_WIDTH, LINE_WIDTH);
+  ctx.fillStyle = '#333';
 }
