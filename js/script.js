@@ -113,22 +113,36 @@ async function draw() {
 
     // vertical
     if (src.x === dest.x) {
-      ctx.moveTo(src.x, Math.min(src.y, dest.y) - adjust);
-      ctx.lineTo(dest.x, Math.max(src.y, dest.y) + adjust);
+      doMultipleTimes(() => {
+        ctx.moveTo(src.x, Math.min(src.y, dest.y) - adjust);
+        ctx.lineTo(dest.x, Math.max(src.y, dest.y) + adjust);
+        ctx.stroke();
+      });
     }
     // horizontal
     else {
-      ctx.moveTo(Math.min(src.x, dest.x) - adjust, src.y);
-      ctx.lineTo(Math.max(src.x, dest.x) + adjust, dest.y);
+      doMultipleTimes(() => {
+        ctx.moveTo(Math.min(src.x, dest.x) - adjust, src.y);
+        ctx.lineTo(Math.max(src.x, dest.x) + adjust, dest.y);
+        ctx.stroke();
+      });
     }
-    ctx.stroke();
 
     await new Promise(resolve => setTimeout(resolve, 10));
   }
 
   // show start end end of maze
-  paintIndex(ctx, start, 'lime', adjust, xStart, xSpace, yStart, ySpace);
-  paintIndex(ctx, end, 'deepskyblue', adjust, xStart, xSpace, yStart, ySpace);
+  doMultipleTimes(() => {
+    paintIndex(ctx, start, 'lime', adjust, xStart, xSpace, yStart, ySpace);
+    paintIndex(ctx, end, 'deepskyblue', adjust, xStart, xSpace, yStart, ySpace);
+  });
+}
+
+function doMultipleTimes(callback) {
+  const times = 10;
+  for (let i = 0; i < times; i++) {
+    callback();
+  }
 }
 
 function paintIndex(ctx, index, color, adjust, xStart, xSpace, yStart, ySpace) {
